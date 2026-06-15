@@ -133,10 +133,6 @@ def inject_css():
             --dim:      #4a5248;
             --teal:     #4ecba0;
             --indigo:   #7b9fd4;
-            --clay:     #c4704a;
-            --gold:     #c9a24a;
-            --sage:     #7ab090;
-            --forest:   #5a9e6a;
             --mono: 'JetBrains Mono', 'Courier New', monospace;
             --sans: 'Inter', system-ui, sans-serif;
         }
@@ -225,21 +221,14 @@ def inject_css():
             cursor: pointer;
             transition: color 0.18s;
             text-decoration: none !important;
-            border: none;
+            border: none !important;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
         }
 
         .sidebar-icon:hover {
             color: var(--teal);
-        }
-
-        .sidebar-icon svg {
-            width: 16px;
-            height: 16px;
-            stroke: currentColor;
-            fill: none;
-            stroke-width: 1.5;
-            stroke-linecap: round;
-            stroke-linejoin: round;
         }
 
         .sidebar-tooltip {
@@ -531,10 +520,6 @@ def inject_css():
             border-left: 1px solid var(--border);
         }
 
-        .detail-block:nth-last-child(-n+2) {
-            border-bottom: none;
-        }
-
         .detail-block.full-width {
             grid-column: 1 / -1;
             padding-right: 0;
@@ -570,22 +555,11 @@ def inject_css():
             position: relative;
         }
 
-        .note-file::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, var(--gold) 0%, transparent 55%);
-            opacity: 0.4;
-        }
-
         .note-label {
             font-size: 9px;
             letter-spacing: 0.22em;
             text-transform: uppercase;
-            color: var(--gold);
+            color: #c9a24a;
             opacity: 0.7;
             margin-bottom: 0.55rem;
         }
@@ -669,14 +643,6 @@ def inject_css():
                 border-left: none;
             }
 
-            .detail-block:nth-last-child(-n+2) {
-                border-bottom: 1px solid var(--border);
-            }
-
-            .detail-block:last-child {
-                border-bottom: none;
-            }
-
             .notes-row {
                 grid-template-columns: 1fr;
             }
@@ -727,33 +693,36 @@ def sidebar_strip():
     st.markdown(
         """
         <div class="sidebar-strip">
-            <div class="sidebar-stamp"><strong>Shravan Parthe</strong> &nbsp;·&nbsp; backend + ai</div>
+            <div class="sidebar-stamp">
+                <strong>Shravan Parthe</strong> &nbsp;·&nbsp; backend + ai
+            </div>
+
             <div class="sidebar-icons">
 
                 <div class="sidebar-icon-wrap">
                     <a class="sidebar-icon" href="https://github.com/Shravan157" target="_blank">
-                        <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                        GH
                     </a>
                     <div class="sidebar-tooltip">github</div>
                 </div>
 
                 <div class="sidebar-icon-wrap">
                     <a class="sidebar-icon" href="https://www.linkedin.com/in/shravan-parthe-00946b2ab/" target="_blank">
-                        <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                        IN
                     </a>
                     <div class="sidebar-tooltip">linkedin</div>
                 </div>
 
                 <div class="sidebar-icon-wrap">
-                    <a class="sidebar-icon" href="mailto:shravanparthe@gmail.com?subject=Backend%20%2B%20GenAI%20role" target="_blank">
-                        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    <a class="sidebar-icon" href="mailto:shravanparthe@gmail.com?subject=Backend%20%2B%20GenAI%20role">
+                        @
                     </a>
                     <div class="sidebar-tooltip">email</div>
                 </div>
 
                 <div class="sidebar-icon-wrap">
-                    <a class="sidebar-icon" href="mailto:shravanparthe@gmail.com?subject=Collaboration%20idea" target="_blank">
-                        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    <a class="sidebar-icon" href="mailto:shravanparthe@gmail.com?subject=Collaboration%20idea">
+                        MSG
                     </a>
                     <div class="sidebar-tooltip">collaborate</div>
                 </div>
