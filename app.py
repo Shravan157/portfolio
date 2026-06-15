@@ -15,6 +15,15 @@ st.set_page_config(
 )
 
 
+CARD_COLOR_CLASS = {
+    "SAHAY": "color-clay",
+    "SikshaSetu": "color-blue",
+    "PhonePe Insights": "color-gold",
+    "MedoraX": "color-sage",
+    "Bird Observation Analysis": "color-forest",
+}
+
+
 CASES = {
     "SAHAY": {
         "deck": "Micro-credit underwriting for people who should not need to understand banking software to access small loans.",
@@ -172,6 +181,8 @@ def inject_css() -> None:
     st.markdown(
         """
         <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap');
+
         :root {
             --ink: #17211d;
             --muted: #5d6963;
@@ -182,14 +193,17 @@ def inject_css() -> None:
             --clay: #b75533;
             --blue: #315b78;
             --gold: #b88a2f;
+            --forest: #4a7c59;
         }
 
         .stApp {
             background:
-                linear-gradient(90deg, rgba(23, 33, 29, 0.045) 1px, transparent 1px),
-                linear-gradient(0deg, rgba(23, 33, 29, 0.035) 1px, transparent 1px),
+                radial-gradient(ellipse 70% 45% at 15% -5%, rgba(183, 85, 51, 0.07) 0%, transparent 65%),
+                radial-gradient(ellipse 55% 40% at 85% 105%, rgba(49, 91, 120, 0.06) 0%, transparent 60%),
+                linear-gradient(90deg, rgba(23, 33, 29, 0.04) 1px, transparent 1px),
+                linear-gradient(0deg, rgba(23, 33, 29, 0.03) 1px, transparent 1px),
                 var(--paper);
-            background-size: 32px 32px;
+            background-size: auto, auto, 32px 32px, 32px 32px, auto;
             color: var(--ink);
         }
 
@@ -200,15 +214,9 @@ def inject_css() -> None:
         }
 
         h1, h2, h3, p, li, div, span { letter-spacing: 0; }
-        h1 {
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: clamp(2.45rem, 7vw, 6.3rem);
-            line-height: 0.94;
-            margin: 0;
-            color: var(--ink);
-        }
+
         h2 {
-            font-family: Georgia, "Times New Roman", serif;
+            font-family: 'DM Serif Display', Georgia, "Times New Roman", serif;
             font-size: clamp(1.55rem, 3.5vw, 3.1rem);
             line-height: 1.05;
             color: var(--ink);
@@ -224,11 +232,69 @@ def inject_css() -> None:
             color: var(--muted);
         }
 
+        /* ── Hero title ── */
+        .hero-title {
+            font-family: 'DM Serif Display', Georgia, serif;
+            font-size: clamp(2.45rem, 7vw, 6.3rem);
+            line-height: 0.94;
+            margin: 0.6rem 0 0;
+            background: linear-gradient(135deg, var(--ink) 25%, var(--clay) 60%, var(--blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ── Stats strip ── */
+        .stats-strip {
+            display: flex;
+            gap: 0;
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+            margin: 1.5rem 0 1.2rem;
+            overflow: hidden;
+        }
+        .stat-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+            padding: 0.95rem 1.1rem;
+            border-right: 1px solid var(--line);
+            transition: background 0.2s ease;
+        }
+        .stat-item:last-child { border-right: none; }
+        .stat-item:hover { background: rgba(23, 33, 29, 0.03); }
+        .stat-number {
+            font-family: 'DM Serif Display', Georgia, serif;
+            font-size: 1.85rem;
+            font-weight: 400;
+            color: var(--ink);
+            line-height: 1;
+        }
+        .stat-label {
+            font-size: 0.73rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            font-family: Inter, system-ui, sans-serif;
+        }
+
+        /* ── Journal shell ── */
         .journal-shell {
             border: 1px solid var(--line);
-            background: rgba(255, 255, 255, 0.78);
-            padding: clamp(1rem, 2vw, 1.55rem);
+            background: rgba(255, 255, 255, 0.84);
+            padding: clamp(1rem, 2vw, 1.7rem);
+            position: relative;
+            overflow: hidden;
         }
+        .journal-shell::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--clay) 0%, var(--blue) 55%, var(--gold) 100%);
+        }
+
         .identity-line {
             display: flex;
             justify-content: space-between;
@@ -240,24 +306,46 @@ def inject_css() -> None:
         }
         .identity-line strong {
             color: var(--ink);
-            font-size: 0.92rem;
+            font-size: 0.91rem;
             text-transform: uppercase;
+            letter-spacing: 0.07em;
         }
-        .identity-line span, .kicker, .meta {
-            color: var(--muted);
-            font-size: 0.86rem;
-        }
+        .identity-line span, .meta { color: var(--muted); font-size: 0.86rem; }
+
+        /* ── Kicker with pulsing dot ── */
         .kicker {
             text-transform: uppercase;
             font-weight: 700;
             color: var(--clay);
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.48rem;
+            font-family: Inter, system-ui, sans-serif;
         }
+        .kicker-dot {
+            width: 7px;
+            height: 7px;
+            background: var(--clay);
+            border-radius: 50%;
+            display: inline-block;
+            flex-shrink: 0;
+            animation: pulse-dot 2.2s ease-in-out infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.55); opacity: 0.55; }
+        }
+
         .opening {
-            font-size: clamp(1.1rem, 2.3vw, 1.45rem);
-            line-height: 1.55;
+            font-size: clamp(1.1rem, 2.3vw, 1.42rem);
+            line-height: 1.6;
             color: var(--ink);
             max-width: 860px;
             margin-top: 1.35rem;
+            font-family: 'DM Serif Display', Georgia, serif;
+            font-style: italic;
         }
         .route-panel {
             border-left: 4px solid var(--sage);
@@ -265,62 +353,212 @@ def inject_css() -> None:
             padding: 1rem 1.1rem;
             margin: 1.2rem 0 0;
         }
-        .case-card, .note-card, .contact-card, .bench-card {
+
+        /* ── Section heading with rule ── */
+        .section-head {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.4rem;
+        }
+        .section-head h2 { margin: 0; white-space: nowrap; }
+        .section-head-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--line) 0%, transparent 100%);
+        }
+
+        /* ── Thread selector label ── */
+        .thread-label {
+            text-transform: uppercase;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--muted);
+            letter-spacing: 0.1em;
+            margin-bottom: 0.55rem;
+            font-family: Inter, system-ui, sans-serif;
+        }
+
+        /* ── Case cards ── */
+        .case-card {
             border: 1px solid var(--line);
             background: var(--panel);
-            padding: 1rem;
+            padding: 1.2rem 1rem 1.1rem;
             min-height: 100%;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+            cursor: default;
         }
+        .case-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(23, 33, 29, 0.09);
+            border-color: rgba(23, 33, 29, 0.22);
+        }
+        .case-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            transition: height 0.22s ease;
+        }
+        .case-card:hover::before { height: 4px; }
+        .color-clay::before  { background: var(--clay); }
+        .color-blue::before  { background: var(--blue); }
+        .color-gold::before  { background: var(--gold); }
+        .color-sage::before  { background: var(--sage); }
+        .color-forest::before { background: var(--forest); }
+
         .case-card strong, .note-card strong, .contact-card strong, .bench-card strong {
             display: block;
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.42rem;
             color: var(--ink);
+            font-size: 0.94rem;
         }
         .case-card p, .note-card p, .contact-card p, .bench-card p { margin-bottom: 0; }
-        .tag-row { display: flex; flex-wrap: wrap; gap: 0.42rem; margin: 0.85rem 0 0; }
+
+        /* ── Tag pills ── */
+        .tag-row { display: flex; flex-wrap: wrap; gap: 0.38rem; margin: 0.9rem 0 0; }
         .tag {
-            border: 1px solid rgba(23, 33, 29, 0.18);
-            background: rgba(251, 250, 246, 0.92);
-            padding: 0.24rem 0.52rem;
-            font-size: 0.78rem;
+            background: rgba(23, 33, 29, 0.05);
+            border: 1px solid rgba(23, 33, 29, 0.1);
+            padding: 0.2rem 0.62rem;
+            font-size: 0.74rem;
             color: var(--ink);
+            border-radius: 100px;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            font-family: Inter, system-ui, sans-serif;
+            transition: background 0.15s ease, border-color 0.15s ease;
         }
+        .tag:hover {
+            background: rgba(23, 33, 29, 0.1);
+            border-color: rgba(23, 33, 29, 0.22);
+        }
+
+        /* ── Case study view ── */
         .case-title {
             border-top: 2px solid var(--ink);
             padding-top: 1rem;
             margin-top: 0.5rem;
         }
         .case-title h2 { margin-bottom: 0.3rem; }
+
+        /* ── Numbered narrative blocks ── */
         .narrative-block {
             border-bottom: 1px solid var(--line);
-            padding: 1rem 0;
+            padding: 1.1rem 0;
+            display: grid;
+            grid-template-columns: 2.4rem 1fr;
+            gap: 1rem;
+            align-items: start;
+        }
+        .narrative-block.no-step {
+            grid-template-columns: 1fr;
         }
         .narrative-block:last-child { border-bottom: 0; }
+        .narrative-step {
+            width: 2.4rem;
+            height: 2.4rem;
+            background: var(--ink);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.67rem;
+            font-weight: 800;
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+            letter-spacing: 0.04em;
+            font-family: Inter, system-ui, sans-serif;
+            transition: background 0.2s ease;
+        }
+        .narrative-block:hover .narrative-step { background: var(--clay); }
         .narrative-block .label {
             color: var(--clay);
             font-weight: 800;
             text-transform: uppercase;
-            font-size: 0.76rem;
-            margin-bottom: 0.35rem;
+            font-size: 0.72rem;
+            margin-bottom: 0.3rem;
+            letter-spacing: 0.09em;
+            font-family: Inter, system-ui, sans-serif;
         }
-        a {
-            color: var(--blue) !important;
-            text-decoration: none;
-            border-bottom: 1px solid rgba(49, 91, 120, 0.35);
+
+        /* ── Bench card ── */
+        .bench-card {
+            border: 1px solid var(--line);
+            background: linear-gradient(155deg, rgba(255,255,255,0.96) 0%, rgba(99, 125, 105, 0.08) 100%);
+            padding: 1.2rem 1rem;
+            position: relative;
         }
+        .bench-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; bottom: 0;
+            width: 3px;
+            background: var(--sage);
+        }
+
+        /* ── Note cards ── */
+        .note-card {
+            border: 1px solid var(--line);
+            background: var(--panel);
+            padding: 1.2rem 1rem;
+            min-height: 100%;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .note-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 22px rgba(23, 33, 29, 0.08);
+        }
+        .note-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gold) 0%, transparent 65%);
+        }
+
+        /* ── Contact cards ── */
+        .contact-card {
+            border: 1px solid var(--line);
+            background: var(--panel);
+            padding: 1.2rem 1rem;
+            min-height: 100%;
+            transition: box-shadow 0.2s ease;
+        }
+        .contact-card:hover { box-shadow: 0 5px 18px rgba(23, 33, 29, 0.08); }
+
+        /* ── Buttons ── */
         .stButton > button, .stDownloadButton > button {
             border-radius: 0;
-            border: 1px solid var(--ink);
-            background: var(--ink);
-            color: white;
+            border: 1.5px solid var(--ink);
+            background: transparent;
+            color: var(--ink);
             min-height: 2.8rem;
             font-weight: 700;
+            letter-spacing: 0.06em;
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            transition: background 0.22s ease, color 0.22s ease, border-color 0.22s ease;
+            font-family: Inter, system-ui, sans-serif;
         }
         .stButton > button:hover, .stDownloadButton > button:hover {
             border-color: var(--clay);
             background: var(--clay);
             color: white;
         }
+
+        a {
+            color: var(--blue) !important;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(49, 91, 120, 0.28);
+            transition: border-color 0.18s ease;
+        }
+        a:hover { border-color: var(--blue); }
+
         [data-testid="stRadio"] label p { color: var(--ink); font-weight: 650; }
         [data-testid="stSelectbox"] div { border-radius: 0; }
 
@@ -329,6 +567,12 @@ def inject_css() -> None:
             .identity-line { display: block; }
             .identity-line span { display: block; margin-top: 0.35rem; }
             .journal-shell { padding: 0.9rem; }
+            .stats-strip { flex-direction: column; }
+            .stat-item { border-right: none; border-bottom: 1px solid var(--line); padding: 0.75rem 1rem; }
+            .stat-item:last-child { border-bottom: none; }
+            .narrative-block { grid-template-columns: 1fr; }
+            .narrative-step { display: none; }
+            .section-head h2 { font-size: 1.55rem; }
         }
         </style>
         """,
@@ -337,15 +581,41 @@ def inject_css() -> None:
 
 
 def tags(items: list[str]) -> str:
-    return "<div class='tag-row'>" + "".join(f"<span class='tag'>{item}</span>" for item in items) + "</div>"
+    return (
+        "<div class='tag-row'>"
+        + "".join(f"<span class='tag'>{item}</span>" for item in items)
+        + "</div>"
+    )
 
 
-def narrative_block(label: str, text: str) -> None:
+def section_header(title: str) -> None:
     st.markdown(
         f"""
-        <div class="narrative-block">
-            <div class="label">{label}</div>
-            <p>{text}</p>
+        <div class="section-head">
+            <h2>{title}</h2>
+            <div class="section-head-line"></div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def narrative_block(label: str, text: str, step: int = 0) -> None:
+    if step:
+        step_html = f'<div class="narrative-step">{str(step).zfill(2)}</div>'
+        extra_cls = ""
+    else:
+        step_html = ""
+        extra_cls = "no-step"
+
+    st.markdown(
+        f"""
+        <div class="narrative-block {extra_cls}">
+            {step_html}
+            <div class="narrative-content">
+                <div class="label">{label}</div>
+                <p>{text}</p>
+            </div>
         </div>
         """,
         unsafe_allow_html=True,
@@ -357,16 +627,42 @@ def header() -> None:
         """
         <div class="journal-shell">
             <div class="identity-line">
-                <div><strong>Shravan Parthe</strong><br><span>AI-powered backend engineer | Mumbai, India | Remote-ready</span></div>
-                <span>Python, Java, Spring Boot, FastAPI, GenAI pipelines, RAG, production-minded APIs</span>
+                <div>
+                    <strong>Shravan Parthe</strong><br>
+                    <span>AI-powered backend engineer &nbsp;&middot;&nbsp; Mumbai, India &nbsp;&middot;&nbsp; Remote-ready</span>
+                </div>
+                <span>Python &middot; Java &middot; Spring Boot &middot; FastAPI &middot; GenAI pipelines &middot; RAG</span>
             </div>
-            <div class="kicker">Case study journal, not a resume wall</div>
-            <h1>I build backend systems where AI has to earn its place.</h1>
+            <div><span class="kicker"><span class="kicker-dot"></span>Case study journal, not a resume wall</span></div>
+            <h1 class="hero-title">I build backend systems<br>where AI has to earn its place.</h1>
             <p class="opening">
                 I am a final-year AI/ML engineering student, but I do not want my work judged like a coursework list.
                 The useful signal is how I think through messy systems: credit decisions, college workflows, public fintech data,
-                medical triage, retrieval boundaries, and the small decisions that make software usable for Indian users who are often treated as edge cases.
+                medical triage, retrieval boundaries, and the small decisions that make software usable for Indian users
+                who are often treated as edge cases.
             </p>
+            <div class="stats-strip">
+                <div class="stat-item">
+                    <span class="stat-number">5</span>
+                    <span class="stat-label">Production apps</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">15+</span>
+                    <span class="stat-label">Technologies</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">50K+</span>
+                    <span class="stat-label">Records processed</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">76%</span>
+                    <span class="stat-label">Credit model accuracy</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">3</span>
+                    <span class="stat-label">Languages (MedoraX)</span>
+                </div>
+            </div>
             <div class="route-panel">
                 <p><strong>How to read this:</strong> choose a thread, inspect the decision trail, then jump elsewhere. The work is arranged like field notes because the thinking matters as much as the shipped app.</p>
             </div>
@@ -377,7 +673,7 @@ def header() -> None:
 
 
 def case_selector() -> str:
-    st.markdown("### Choose a thread")
+    st.markdown("<div class='thread-label'>Choose a thread</div>", unsafe_allow_html=True)
     names = list(CASES.keys())
     return st.radio(
         "Case files",
@@ -388,13 +684,14 @@ def case_selector() -> str:
 
 
 def case_summary_grid() -> None:
-    st.markdown("## The Workbench")
+    section_header("The Workbench")
     cols = st.columns(3)
     for idx, (name, case) in enumerate(CASES.items()):
+        color_cls = CARD_COLOR_CLASS.get(name, "color-clay")
         with cols[idx % 3]:
             st.markdown(
                 f"""
-                <div class="case-card">
+                <div class="case-card {color_cls}">
                     <strong>{name}</strong>
                     <p>{case["deck"]}</p>
                     <p class="meta">{case["market"]}</p>
@@ -410,7 +707,7 @@ def render_case(name: str) -> None:
     st.markdown(
         f"""
         <div class="case-title">
-            <div class="kicker">{case["market"]}</div>
+            <span class="kicker"><span class="kicker-dot"></span>{case["market"]}</span>
             <h2>{name}</h2>
             <p>{case["deck"]}</p>
             {tags(case["stack"])}
@@ -421,11 +718,11 @@ def render_case(name: str) -> None:
 
     left, right = st.columns([1.55, 0.85], gap="large")
     with left:
-        narrative_block("Problem I was actually solving", case["problem"])
-        narrative_block("Engineering decision", case["decision"])
-        narrative_block("Core technical challenge", case["challenge"])
-        narrative_block("Measurable outcome", case["outcome"])
-        narrative_block("What I would do differently now", case["differently"])
+        narrative_block("Problem I was actually solving", case["problem"], 1)
+        narrative_block("Engineering decision", case["decision"], 2)
+        narrative_block("Core technical challenge", case["challenge"], 3)
+        narrative_block("Measurable outcome", case["outcome"], 4)
+        narrative_block("What I would do differently now", case["differently"], 5)
 
     with right:
         st.markdown(
@@ -441,7 +738,7 @@ def render_case(name: str) -> None:
 
 
 def render_learning() -> None:
-    st.markdown("## Learning In Progress")
+    section_header("Learning In Progress")
     st.markdown(
         """
         <p>
@@ -466,7 +763,7 @@ def render_learning() -> None:
 
 
 def render_profile_strip() -> None:
-    st.markdown("## Useful Context")
+    section_header("Useful Context")
     col1, col2, col3 = st.columns(3)
     with col1:
         st.markdown(
@@ -501,7 +798,7 @@ def render_profile_strip() -> None:
 
 
 def render_contact() -> None:
-    st.markdown("## Start The Right Conversation")
+    section_header("Start The Right Conversation")
     recruiter, collaborator = st.columns(2, gap="large")
     with recruiter:
         st.markdown(
@@ -516,7 +813,11 @@ def render_contact() -> None:
             """,
             unsafe_allow_html=True,
         )
-        st.link_button("Email for roles", "mailto:shravanparthe@gmail.com?subject=Backend%20%2B%20GenAI%20role", use_container_width=True)
+        st.link_button(
+            "Email for roles",
+            "mailto:shravanparthe@gmail.com?subject=Backend%20%2B%20GenAI%20role",
+            use_container_width=True,
+        )
 
     with collaborator:
         st.markdown(
@@ -531,10 +832,19 @@ def render_contact() -> None:
             """,
             unsafe_allow_html=True,
         )
-        st.link_button("Email for collaboration", "mailto:shravanparthe@gmail.com?subject=Collaboration%20idea", use_container_width=True)
+        st.link_button(
+            "Email for collaboration",
+            "mailto:shravanparthe@gmail.com?subject=Collaboration%20idea",
+            use_container_width=True,
+        )
 
+    st.markdown("<div style='height:0.6rem'></div>", unsafe_allow_html=True)
     social1, social2, social3 = st.columns(3)
-    social1.link_button("LinkedIn", "https://www.linkedin.com/in/shravan-parthe-00946b2ab/", use_container_width=True)
+    social1.link_button(
+        "LinkedIn",
+        "https://www.linkedin.com/in/shravan-parthe-00946b2ab/",
+        use_container_width=True,
+    )
     social2.link_button("GitHub", "https://github.com/Shravan157", use_container_width=True)
     if RESUME_PATH.exists():
         with RESUME_PATH.open("rb") as resume_file:
