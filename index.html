@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shravan Parthe — Backend Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14171A;
+    --ink-soft:#52585F;
+    --paper:#F3F4F1;
+    --surface:#FFFFFF;
+    --line:#E1E3DE;
+    --accent:#FF6A00;
+    --accent-dim:#FFE8D6;
+    --ok:#1E8E5A;
+    --radius:10px;
+    --maxw:920px;
+  }
+  *{box-sizing:border-box;}
+  html{}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Space Grotesk',sans-serif;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+
+  /* ---------- Nav ---------- */
+  header.site{
+    position:sticky;top:0;z-index:50;
+    background:rgba(243,244,241,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .navbar{
+    max-width:var(--maxw);margin:0 auto;padding:14px 24px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .brand{
+    font-family:'JetBrains Mono',monospace;
+    font-weight:600;font-size:15px;
+  }
+  .brand span{color:var(--accent);}
+  nav.links{display:flex;gap:22px;font-family:'JetBrains Mono',monospace;font-size:13px;}
+  nav.links a{text-decoration:none;color:var(--ink-soft);transition:color .15s;}
+  nav.links a:hover{color:var(--ink);}
+  .nav-toggle{display:none;background:none;border:1px solid var(--line);border-radius:6px;padding:6px 10px;font-family:'JetBrains Mono',monospace;cursor:pointer;}
+
+  @media (max-width:640px){
+    nav.links{
+      position:absolute;top:100%;left:0;right:0;
+      background:var(--surface);border-bottom:1px solid var(--line);
+      flex-direction:column;padding:16px 24px;gap:14px;
+      display:none;
+    }
+    nav.links.open{display:flex;}
+    .nav-toggle{display:block;}
+  }
+
+  /* ---------- Eyebrow ---------- */
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px;color:var(--accent);
+    margin-bottom:10px;display:block;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{padding:72px 0 48px;}
+  .hero h1{font-size:clamp(30px,5vw,44px);font-weight:600;line-height:1.15;}
+  .hero .role{
+    color:var(--ink-soft);font-size:18px;margin-top:10px;
+  }
+  .terminal{
+    margin-top:32px;
+    background:#101216;
+    border-radius:var(--radius);
+    border:1px solid #25282E;
+    overflow:hidden;
+    box-shadow:0 18px 40px -22px rgba(0,0,0,0.45);
+  }
+  .term-bar{
+    display:flex;align-items:center;gap:7px;
+    padding:10px 14px;border-bottom:1px solid #25282E;
+  }
+  .dot{width:10px;height:10px;border-radius:50%;}
+  .dot.r{background:#FF5F56;}
+  .dot.y{background:#FFBD2E;}
+  .dot.g{background:#27C93F;}
+  .term-title{margin-left:8px;color:#7A8088;font-family:'JetBrains Mono',monospace;font-size:12px;}
+  .term-body{
+    padding:20px 22px 26px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:14px;
+    color:#D5D8DC;
+    min-height:140px;
+  }
+  .term-body .prompt{color:#7A8088;}
+  .term-body .out{color:#F3F4F1;}
+  .term-body .status{color:var(--ok);}
+  .cursor{display:inline-block;width:8px;height:16px;background:var(--accent);vertical-align:middle;animation:blink 1s steps(1) infinite;}
+  @keyframes blink{50%{opacity:0;}}
+
+  .hero-links{margin-top:24px;display:flex;flex-wrap:wrap;gap:14px;font-family:'JetBrains Mono',monospace;font-size:13px;}
+  .hero-links a{
+    border:1px solid var(--line);padding:8px 14px;border-radius:8px;
+    text-decoration:none;background:var(--surface);transition:border-color .15s, color .15s;
+  }
+  .hero-links a:hover{border-color:var(--accent);color:var(--accent);}
+  .resume-btn{
+    background:var(--ink);color:var(--paper)!important;border-color:var(--ink)!important;
+  }
+  .resume-btn:hover{background:var(--accent)!important;border-color:var(--accent)!important;color:#fff!important;}
+
+  /* ---------- Sections ---------- */
+  section{padding:56px 0;border-top:1px solid var(--line);}
+  section > .wrap > h2{font-size:24px;font-weight:600;margin-bottom:28px;}
+
+  /* About */
+  .about-text{max-width:680px;color:var(--ink-soft);font-size:16px;}
+  .about-text strong{color:var(--ink);font-weight:600;}
+
+  /* Experience */
+  .exp-card{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px 24px;
+  }
+  .exp-head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:4px;}
+  .exp-head h3{font-size:18px;font-weight:600;}
+  .exp-meta{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--ink-soft);}
+  .exp-card ul{margin:14px 0 0;padding-left:20px;color:var(--ink-soft);font-size:15px;}
+  .exp-card li{margin-bottom:8px;}
+  .tagrow{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;}
+  .tag{
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;
+    background:var(--accent-dim);color:#A8420A;
+    padding:4px 10px;border-radius:6px;
+  }
+
+  /* Projects */
+  .project{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px 26px 24px;margin-bottom:22px;
+  }
+  .project:last-child{margin-bottom:0;}
+  .project-head{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;}
+  .project-head h3{font-size:19px;font-weight:600;}
+  .project-meta{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);margin-top:4px;}
+  .gh-link{
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;
+    border:1px solid var(--line);padding:6px 12px;border-radius:7px;
+    text-decoration:none;white-space:nowrap;transition:border-color .15s,color .15s;
+  }
+  .gh-link:hover{border-color:var(--accent);color:var(--accent);}
+  .block-label{
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--accent);
+    text-transform:uppercase;letter-spacing:.04em;margin:18px 0 6px;
+  }
+  .project p{margin:0;color:var(--ink-soft);font-size:15px;}
+
+  /* Skills */
+  .skills-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px 32px;}
+  @media (max-width:640px){.skills-grid{grid-template-columns:1fr;}}
+  .skill-cat h4{
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--ink-soft);
+    text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px;
+  }
+  .skill-pills{display:flex;flex-wrap:wrap;gap:8px;}
+  .skill-pills span{
+    background:var(--surface);border:1px solid var(--line);border-radius:7px;
+    padding:6px 12px;font-size:13.5px;
+  }
+
+  /* Education + Courses */
+  .ed-row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:6px;}
+  .ed-row h3{font-size:17px;font-weight:600;}
+  .ed-meta{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--ink-soft);}
+  .ed-sub{color:var(--ink-soft);font-size:15px;}
+
+  table.courses{width:100%;border-collapse:collapse;margin-top:18px;font-size:14.5px;}
+  table.courses th{
+    text-align:left;font-family:'JetBrains Mono',monospace;font-size:11.5px;
+    text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);
+    border-bottom:1px solid var(--line);padding:0 0 8px;
+  }
+  table.courses td{padding:12px 0;border-bottom:1px solid var(--line);color:var(--ink-soft);}
+  table.courses td:first-child{color:var(--ink);font-weight:500;}
+
+  /* Contact / Footer */
+  .contact-grid{display:flex;flex-wrap:wrap;gap:14px;}
+  .contact-card{
+    flex:1 1 200px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px 20px;text-decoration:none;transition:border-color .15s;
+  }
+  .contact-card:hover{border-color:var(--accent);}
+  .contact-card .label{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;}
+  .contact-card .value{margin-top:6px;font-size:15px;font-weight:500;word-break:break-word;}
+
+  footer{padding:30px 0 50px;}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--ink-soft);}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="navbar">
+    <div class="brand">shravan<span>.</span>dev</div>
+    <button class="nav-toggle" id="navToggle">menu</button>
+    <nav class="links" id="navLinks">
+      <a href="javascript:void(0)" data-target="about">about</a>
+      <a href="javascript:void(0)" data-target="experience">experience</a>
+      <a href="javascript:void(0)" data-target="projects">projects</a>
+      <a href="javascript:void(0)" data-target="skills">skills</a>
+      <a href="javascript:void(0)" data-target="education">education</a>
+      <a href="javascript:void(0)" data-target="contact">contact</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- HERO -->
+  <section class="hero" style="border-top:none;">
+    <h1>Shravan Parthe</h1>
+    <p class="role">Backend Developer · AI/ML Enthusiast · Mobile App Developer</p>
+
+    <div class="terminal">
+      <div class="term-bar">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="term-title">shravan@portfolio: ~</span>
+      </div>
+      <div class="term-body">
+        <div><span class="prompt">$</span> whoami</div>
+        <div class="out" id="typedLine"></div>
+      </div>
+    </div>
+
+    <div class="hero-links">
+      <a href="Shravan_Parthe_Resume.pdf" download class="resume-btn">↓ download resume</a>
+      <a href="mailto:shravanparthe@gmail.com">email</a>
+      <a href="https://github.com/Shravan157" target="_blank" rel="noopener">github</a>
+      <a href="https://www.linkedin.com/in/shravanparthe-00946b2ab" target="_blank" rel="noopener">linkedin</a>
+      <a href="tel:+917385813010">call</a>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="wrap" style="padding:0;">
+      <span class="eyebrow">// about</span>
+      <h2>Background</h2>
+      <p class="about-text">
+        Final-year <strong>B.Tech in Computer Science &amp; Engineering (AI &amp; ML)</strong> student at
+        Vishwaniketan's Institute of Management Entrepreneurship and Engineering Technology (ViMEET),
+        University of Mumbai — expected graduation <strong>2027</strong>, CGPA <strong>7.5/10</strong>.
+        Works across <strong>Java/Spring Boot</strong> backends, <strong>Python/FastAPI/LangChain</strong>
+        GenAI systems, and <strong>Flutter/React</strong> frontends. Based in Mumbai, India.
+      </p>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="wrap" style="padding:0;">
+      <span class="eyebrow">// experience</span>
+      <h2>Work Experience</h2>
+
+      <div class="exp-card">
+        <div class="exp-head">
+          <h3>Data Science with Gen AI Intern — Innovexis</h3>
+          <span class="exp-meta">Apr 2026 – May 2026 · Remote</span>
+        </div>
+        <ul>
+          <li>Selected for Innovexis's Data Science with Generative AI internship program after shortlisting from multiple applicants.</li>
+          <li>Built and deployed 4 end-to-end data science projects covering NLP, machine learning, and data engineering, all shipped as production-ready Streamlit applications on Streamlit Cloud.</li>
+          <li>Sentiment analysis pipeline for restaurant reviews using TF-IDF and Logistic Regression.</li>
+          <li>Tourism analytics app with XGBoost-based rating prediction and collaborative filtering recommendations.</li>
+          <li>PhonePe transaction ETL pipeline with MySQL integration and interactive dashboards.</li>
+          <li>AI-powered real estate investment advisor trained on 250K Indian properties with 5-year price forecasting.</li>
+          <li>Applied Python, NumPy, and Pandas to preprocess and evaluate datasets with 10,000+ records for model training.</li>
+        </ul>
+        <div class="tagrow">
+          <span class="tag">Python</span><span class="tag">Scikit-learn</span><span class="tag">XGBoost</span>
+          <span class="tag">NLTK</span><span class="tag">Pandas</span><span class="tag">MySQL</span>
+          <span class="tag">SQLAlchemy</span><span class="tag">Plotly</span><span class="tag">Streamlit</span><span class="tag">MLflow</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="wrap" style="padding:0;">
+      <span class="eyebrow">// projects</span>
+      <h2>Selected Projects</h2>
+
+      <div class="project">
+        <div class="project-head">
+          <div>
+            <h3>SikshaSetu — Rural Education Platform</h3>
+            <div class="project-meta">Jan 2025 – Apr 2025 · Full-stack developer</div>
+          </div>
+          <a class="gh-link" href="https://github.com/Shravan157" target="_blank" rel="noopener">View on GitHub →</a>
+        </div>
+
+        <div class="block-label">Problem</div>
+        <p>Rural and underserved colleges run academic operations — attendance, timetables, assignments, notes,
+        results, events, and classes — across disconnected manual systems. SikshaSetu unifies these into a single
+        portal with secure role-based access for Students, Faculty, and Admins, including support for live virtual
+        classrooms where physical infrastructure is limited.</p>
+
+        <div class="block-label">Approach</div>
+        <p>Backend built on Java 17 and Spring Boot 3.5, with Spring Security and JWT enforcing role-based access
+        across 3 roles and all API endpoints. Modeled a 10+ table relational schema with Spring Data JPA and
+        Hibernate on MySQL (H2 for tests). Added an AI Assistant using LangChain4j that streams responses, answers
+        portal-navigation questions, calls backend tools for data instead of guessing, and restricts admin-only data.
+        Notes search uses a Qdrant vector database with Apache Tika for document text extraction (RAG). Live virtual
+        classrooms run on ZEGOCLOUD, with video tokens generated server-side. Frontend is React 18 with Tailwind CSS
+        and the ZEGOCLOUD UI Kit.</p>
+
+        <div class="tagrow">
+          <span class="tag">Java 17</span><span class="tag">Spring Boot</span><span class="tag">Spring Security / JWT</span>
+          <span class="tag">Spring Data JPA</span><span class="tag">MySQL</span><span class="tag">LangChain4j</span>
+          <span class="tag">Qdrant</span><span class="tag">React</span><span class="tag">ZEGOCLOUD</span>
+        </div>
+      </div>
+
+      <div class="project">
+        <div class="project-head">
+          <div>
+            <h3>SahayLoan — Micro-Loan Platform</h3>
+            <div class="project-meta">Jan 2026 – Present · Developer</div>
+          </div>
+          <a class="gh-link" href="https://github.com/Shravan157/Sahay-Loan" target="_blank" rel="noopener">View on GitHub →</a>
+        </div>
+
+        <div class="block-label">Problem</div>
+        <p>Underserved communities in India often lack access to small, fast credit. Manual loan review is slow
+        and inconsistent. SahayLoan lets users apply for micro-loans up to ₹1,00,000 from a phone, with automated
+        credit decisions, digital KYC, and online EMI repayment, across three roles: Borrower, Admin, and Loan
+        Provider.</p>
+
+        <div class="block-label">Approach</div>
+        <p>Flutter frontend (Android, iOS, Web, Windows) talking to a FastAPI Python backend over REST. Loan
+        eligibility is automated with a Random Forest classifier trained on 19 of 28 borrower attributes, reaching
+        76% test accuracy. KYC is automated with Tesseract OCR for Aadhaar and PAN extraction, removing manual data
+        entry. Stripe handles multi-installment EMI payments. Firebase Auth and Firestore power the 3-role access
+        system with real-time loan-status updates and push notifications. The loan workflow moves from application
+        through admin review, approval or provider sharing, disbursement, and EMI repayment to completion.</p>
+
+        <div class="tagrow">
+          <span class="tag">Flutter</span><span class="tag">FastAPI</span><span class="tag">Python</span>
+          <span class="tag">Scikit-learn</span><span class="tag">Firebase</span><span class="tag">Tesseract OCR</span>
+          <span class="tag">Stripe</span>
+        </div>
+      </div>
+
+      <div class="project">
+        <div class="project-head">
+          <div>
+            <h3>PhonePe Insights — ETL &amp; Analytics Dashboard</h3>
+            <div class="project-meta">Jan 2026 – Mar 2026 · Data engineering &amp; dashboard developer</div>
+          </div>
+          <a class="gh-link" href="https://github.com/Shravan157/phonepe-insights" target="_blank" rel="noopener">View on GitHub →</a>
+        </div>
+
+        <div class="block-label">Problem</div>
+        <p>Raw PhonePe transaction data spread across states and categories is hard to query or interpret in its
+        original form. The goal was to turn it into a structured, queryable dataset and a dashboard that surfaces
+        transaction trends, regional breakdowns, and payment-category insights.</p>
+
+        <div class="block-label">Approach</div>
+        <p>Built a Python ETL pipeline that extracts, cleans, and loads 9 raw transaction datasets — 50,000+ records
+        across 36 states — into a normalized 5-table MySQL schema, reducing query time. SQLAlchemy and PyMySQL handle
+        parameterized SQL queries for ad-hoc analysis. The result is delivered as a Streamlit dashboard with 10+
+        interactive Plotly charts covering trends, regions, and payment categories.</p>
+
+        <div class="tagrow">
+          <span class="tag">Python</span><span class="tag">MySQL</span><span class="tag">SQLAlchemy</span>
+          <span class="tag">Pandas</span><span class="tag">Streamlit</span><span class="tag">Plotly</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="wrap" style="padding:0;">
+      <span class="eyebrow">// skills</span>
+      <h2>Technical Skills</h2>
+      <div class="skills-grid">
+        <div class="skill-cat">
+          <h4>Languages</h4>
+          <div class="skill-pills">
+            <span>Java</span><span>Python</span><span>JavaScript</span><span>Dart</span><span>SQL</span>
+          </div>
+        </div>
+        <div class="skill-cat">
+          <h4>Frameworks &amp; Libraries</h4>
+          <div class="skill-pills">
+            <span>Spring Boot</span><span>Spring Security</span><span>React</span><span>Flutter</span>
+            <span>FastAPI</span><span>LangChain</span>
+          </div>
+        </div>
+        <div class="skill-cat">
+          <h4>Databases</h4>
+          <div class="skill-pills">
+            <span>MySQL</span><span>PostgreSQL</span><span>Firebase</span>
+          </div>
+        </div>
+        <div class="skill-cat">
+          <h4>Tools &amp; Platforms</h4>
+          <div class="skill-pills">
+            <span>Docker</span><span>GitHub</span><span>NumPy</span><span>Pandas</span><span>Scikit-learn</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION + COURSES -->
+  <section id="education">
+    <div class="wrap" style="padding:0;">
+      <span class="eyebrow">// education</span>
+      <h2>Education &amp; Coursework</h2>
+
+      <div class="ed-row">
+        <h3>Vishwaniketan's Institute of Management Entrepreneurship and Engineering Technology (ViMEET)</h3>
+        <span class="ed-meta">Jun 2023 – May 2027</span>
+      </div>
+      <p class="ed-sub">B.Tech in Computer Science &amp; Engineering (AI &amp; ML), University of Mumbai · CGPA 7.5/10.0</p>
+
+      <table class="courses">
+        <tr><th>Course</th><th>Provider</th></tr>
+        <tr><td>Java &amp; Spring Boot</td><td>Udemy — Telusko</td></tr>
+        <tr><td>Machine Learning Bootcamp</td><td>Udemy — Krish Naik</td></tr>
+        <tr><td>End-to-End Generative AI &amp; LangChain</td><td>CampusX</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="wrap" style="padding:0;">
+      <span class="eyebrow">// contact</span>
+      <h2>Get in Touch</h2>
+      <div class="contact-grid">
+        <a class="contact-card" href="mailto:shravanparthe@gmail.com">
+          <div class="label">Email</div>
+          <div class="value">shravanparthe@gmail.com</div>
+        </a>
+        <a class="contact-card" href="tel:+917385813010">
+          <div class="label">Phone</div>
+          <div class="value">+91 73858 13010</div>
+        </a>
+        <a class="contact-card" href="https://www.linkedin.com/in/shravanparthe-00946b2ab" target="_blank" rel="noopener">
+          <div class="label">LinkedIn</div>
+          <div class="value">shravanparthe-00946b2ab</div>
+        </a>
+        <a class="contact-card" href="https://github.com/Shravan157" target="_blank" rel="noopener">
+          <div class="label">GitHub</div>
+          <div class="value">Shravan157</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Mumbai, India</span>
+    <span>© 2026 Shravan Parthe</span>
+  </div>
+</footer>
+
+<script>
+  // mobile nav toggle + smooth scroll without hash navigation
+  document.getElementById('navToggle').addEventListener('click', function(){
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+  document.querySelectorAll('#navLinks a').forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      document.getElementById('navLinks').classList.remove('open');
+      var target = document.getElementById(a.getAttribute('data-target'));
+      if(target){ target.scrollIntoView({behavior:'smooth', block:'start'}); }
+    });
+  });
+
+  // terminal typing effect
+  (function(){
+    var line1 = "> Shravan Parthe";
+    var line2 = "> Backend Developer · AI/ML Enthusiast · Mobile App Developer";
+    var line3 = "> Mumbai, India · ● open to opportunities";
+    var full = [line1, line2, line3];
+    var el = document.getElementById('typedLine');
+    var html = "";
+    var li = 0, ci = 0;
+
+    function step(){
+      if(li >= full.length){
+        el.innerHTML = html + '<span class="cursor"></span>';
+        return;
+      }
+      var current = full[li];
+      ci++;
+      var partial = current.substring(0, ci);
+      var cls = li === 2 ? 'status' : 'out';
+      el.innerHTML = html + '<span class="' + cls + '">' + partial + '</span>' + '<span class="cursor"></span>';
+      if(ci >= current.length){
+        html += '<span class="' + cls + '">' + current + '</span><br>';
+        li++; ci = 0;
+        setTimeout(step, 220);
+      } else {
+        setTimeout(step, 18);
+      }
+    }
+    step();
+  })();
+</script>
+
+</body>
+</html>
